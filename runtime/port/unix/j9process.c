@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 1991, 2017 IBM Corp. and others
+ * Copyright (c) 1991, 2019 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
  * the terms of the Eclipse Public License 2.0 which accompanies this
@@ -379,7 +379,7 @@ j9process_create(struct J9PortLibrary *portLibrary, const char *command[], uintp
 		}
 
 		/* if we get here ==> tell the parent that the execv failed ! Send the error number. */
-		write(forkedChildProcess[1], &errno, sizeof(errno));
+		rc = write(forkedChildProcess[1], &errno, sizeof(errno));
 		close(forkedChildProcess[0]);
 		close(forkedChildProcess[1]);
 		/* If the exec failed, we must exit or there will be two VM processes running. */
@@ -457,7 +457,7 @@ j9process_create(struct J9PortLibrary *portLibrary, const char *command[], uintp
 
 		/* let the forked child start. */
 		close(forkedChildProcess[1]);
-		read(forkedChildProcess[0], &dummy, 1);
+		rc = read(forkedChildProcess[0], &dummy, 1);
 
 		/* [PR CMVC 143339] OTTBLD: jclmaxtest_jit_G1 Test_Runtime failure
 		 * Instead of using timeout to determine if child process has been created successfully,
