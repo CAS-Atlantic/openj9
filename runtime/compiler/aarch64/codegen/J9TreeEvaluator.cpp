@@ -38,4 +38,79 @@ J9::ARM64::TreeEvaluator::generateFillInDataBlockSequenceForUnresolvedField(TR::
    {
    TR_ASSERT_FATAL(false, "This helper implements platform specific code for Fieldwatch, which is currently not supported on ARM64 platforms.\n");
    }
-	
+
+TR::Register *
+J9::ARM64::TreeEvaluator::monentEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR_J9VMBase *fej9 = (TR_J9VMBase *) (cg->fe());
+   int32_t lwOffset = fej9->getByteOffsetToLockword((TR_OpaqueClassBlock *) cg->getMonClass(node));
+   TR_ASSERT(lwOffset>=LOWER_IMMED && lwOffset<=UPPER_IMMED, "Need re-work on using lwOffset.");
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::call);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::checkcastEvaluator(TR::Node * node, TR::CodeGenerator * cg)
+   {
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   // call helper to do checkcast
+   TR::Node::recreate(node, TR::call);
+   TR::Register * targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::monexitEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::call);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::instanceofEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   // Call helper
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::icall);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::newObjectEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::acall);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::newArrayEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::acall);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+
+TR::Register *
+J9::ARM64::TreeEvaluator::multianewArrayEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR::ILOpCodes opCode = node->getOpCodeValue();
+   TR::Node::recreate(node, TR::acall);
+   TR::Register *targetRegister = directCallEvaluator(node, cg);
+   TR::Node::recreate(node, opCode);
+   return targetRegister;
+   }
+

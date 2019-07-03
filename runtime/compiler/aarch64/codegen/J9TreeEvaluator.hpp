@@ -58,7 +58,21 @@ class OMR_EXTENSIBLE TreeEvaluator: public J9::TreeEvaluator
     * Generate instructions for static/instance field access report.
     */
     static void generateTestAndReportFieldWatchInstructions(TR::CodeGenerator *cg, TR::Node *node, TR::Snippet *dataSnippet, bool isWrite, TR::Register *sideEffectRegister, TR::Register *valueReg);
-	
+
+    static TR::Register *monentEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *instanceofEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *monexitEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *checkcastEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *newObjectEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *newArrayEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
+    static TR::Register *multianewArrayEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+
    };
 
 }
