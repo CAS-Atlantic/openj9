@@ -177,3 +177,32 @@ J9::ARM64::TreeEvaluator::anewArrayEvaluator(TR::Node *node, TR::CodeGenerator *
    return targetRegister;
    }
 
+J9::ARM64::TreeEvaluator::asynccheckEvaluator(TR::Node *node, TR::CodeGenerator *cg)
+   {
+   TR::Node *testNode = node->getFirstChild();
+   TR::Node *secondChild = testNode->getSecondChild();
+   bool is64Bit = node->getFirstChild()->getType().isInt64();
+   
+   // Ensure testNode's opcode is a cmpeq instruction and that secondChild's is a loadconst.
+   // What is the proper arm64 equivalent or cmpeq?
+   TR_ASSERT(testNode->getOpCodeValue() == (is64Bit ? TR::subsx : TR::subsw), "asynccheck bad format.");
+   TR_ASSERT(secondChild->getOpCode().isLoadConst() && secondChild->getRegister() == NULL, "asynccheck bad format.");
+   // Is putting -1L and -1 in seperately necessary? (Power does this)
+   is64Bit ? TR_ASSERT(secondChild->getLongInt() == -1L, "asynccheck bad format.") : TR_ASSERT(secondChild->getInt() == -1, "asynccheck bad format.");
+   
+   TR::Instruction *gcPoint;
+   TR::Node *firstChild = testNode->getFirstChild();
+   TR::Register *src1Reg = cg->evaluate(firstChild);
+   TR::Register *src2Reg = cg->evaluate(secondChild);
+
+   gcPoint = generateCompareInstruction(cg, node, src1Reg, src2Reg, is64bit, NULL);
+   TR::LabelSymbol *snippetLabel = generateLabelSymbol(cg);
+   cg->addSnippet(new (cg->trHeapMemory()) TR::ARM64HelperCallSnippet(cg, node, snippetLabel, node->getSymbolReference()));
+   gcPoint = generateConditionalBranchInstruction(cg, TR::InstOpCode::b_cond, node, snippetLabel, TR::CC_EQ, NULL, NULL);
+   gcPoint->setAsyncBranch();
+   gcPoint->ARM64NeedsGCMap(0xFFFFFFFF);
+   cg->decReferenceCount(firstChild);
+   cg->decReferenceCount(secondChild);
+   cg->decReferenceCount(testNode);
+   return NULL;
+   }
