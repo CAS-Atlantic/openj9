@@ -50,7 +50,7 @@ class OMR_EXTENSIBLE TreeEvaluator: public J9::TreeEvaluator
 
    static TR::Register * DIVCHKEvaluator(TR::Node *node, TR::CodeGenerator *cg);
    
-   TR::Register * asynccheckEvaluator(TR::Node *node, TR::CodeGenerator *cg);
+   static TR::Register * asynccheckEvaluator(TR::Node *node, TR::CodeGenerator *cg);
 
    /*
     * Generates instructions to fill in the J9JITWatchedStaticFieldData.fieldAddress, J9JITWatchedStaticFieldData.fieldClass for static fields,

@@ -45,7 +45,7 @@ extern void TEMPORARY_initJ9ARM64TreeEvaluatorTable(TR::CodeGenerator *cg)
    // TODO:ARM64: Enable when Implemented: tet[TR::monent] = TR::TreeEvaluator::monentEvaluator;
    tet[TR::monexit] = TR::TreeEvaluator::monexitEvaluator;
    // TODO:ARM64: Enable when Implemented: tet[TR::monexitfence] = TR::TreeEvaluator::monexitfenceEvaluator;
-   // TODO:ARM64: Enable when Implemented: tet[TR::asynccheck] = TR::TreeEvaluator::asynccheckEvaluator;
+   tet[TR::asynccheck] = TR::TreeEvaluator::asynccheckEvaluator;
    // TODO:ARM64: Enable when Implemented: tet[TR::instanceof] = TR::TreeEvaluator::instanceofEvaluator;
    tet[TR::checkcast] = TR::TreeEvaluator::checkcastEvaluator;
    tet[TR::checkcastAndNULLCHK] = TR::TreeEvaluator::checkcastAndNULLCHKEvaluator;
@@ -177,6 +177,7 @@ J9::ARM64::TreeEvaluator::anewArrayEvaluator(TR::Node *node, TR::CodeGenerator *
    return targetRegister;
    }
 
+TR::Register *
 J9::ARM64::TreeEvaluator::asynccheckEvaluator(TR::Node *node, TR::CodeGenerator *cg)
    {
    TR::Node *testNode = node->getFirstChild();
