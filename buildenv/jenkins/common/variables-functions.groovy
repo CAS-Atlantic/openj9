@@ -1346,6 +1346,11 @@ def set_build_extra_options(build_specs=null) {
         buildspec = buildspec_manager.getSpec(SPEC)
         // single release
         EXTRA_GETSOURCE_OPTIONS = buildspec.getVectorField("extra_getsource_options", SDK_VERSION).join(" ")
+        GSKIT_BIN_OPTIONS = buildspec.getScalarField("gskit_bin_options", SDK_VERSION)
+        if (GSKIT_BIN_OPTIONS) {
+            // append options for GSKIT binaries, if available
+            EXTRA_GETSOURCE_OPTIONS = "${EXTRA_GETSOURCE_OPTIONS} ${GSKIT_BIN_OPTIONS}"
+        }
         if (params.EXTRA_GETSOURCE_OPTIONS) {
             // append options from job configuration to those specified in variables file
             EXTRA_GETSOURCE_OPTIONS = "${EXTRA_GETSOURCE_OPTIONS} ${params.EXTRA_GETSOURCE_OPTIONS}"
@@ -1354,6 +1359,11 @@ def set_build_extra_options(build_specs=null) {
         EXTRA_CONFIGURE_OPTIONS = params.EXTRA_CONFIGURE_OPTIONS
         if (!EXTRA_CONFIGURE_OPTIONS) {
             EXTRA_CONFIGURE_OPTIONS = buildspec.getVectorField("extra_configure_options", SDK_VERSION).join(" ")
+        }
+        OPENJCEPLUS_CONFIG_OPTIONS = buildspec.getScalarField("openjceplus_config_options", SDK_VERSION)
+        if (OPENJCEPLUS_CONFIG_OPTIONS) {
+            // append options for OpenJCEPlus bundling, if available
+            EXTRA_CONFIGURE_OPTIONS = "${EXTRA_CONFIGURE_OPTIONS} ${OPENJCEPLUS_CONFIG_OPTIONS}"
         }
 
         EXTRA_MAKE_OPTIONS = params.EXTRA_MAKE_OPTIONS
