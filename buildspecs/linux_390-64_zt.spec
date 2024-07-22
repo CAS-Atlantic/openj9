@@ -216,7 +216,6 @@ restricted by GSA ADP Schedule Contract with IBM Corp.
 		<flag id="opt_jxeLoadSupport" value="true"/>
 		<flag id="opt_memoryCheckSupport" value="true"/>
 		<flag id="opt_multiVm" value="true"/>
-		<flag id="opt_panama" value="false"/>
 		<flag id="opt_reflect" value="true"/>
 		<flag id="opt_sharedClasses" value="true"/>
 		<flag id="opt_sidecar" value="true"/>
