@@ -341,7 +341,7 @@ def get_compile_command() {
     if ((SDK_VERSION == "17") && SPEC.contains('zos')) {
          make_target = 'images test-image debug-image'
     } else if ((SDK_VERSION == "21") && SPEC.contains('zos')) {
-         make_target = 'java.base-java images debug-image'
+         make_target = 'java.base-java images test-image debug-image'
     } else {
          make_target = 'all'
     }
