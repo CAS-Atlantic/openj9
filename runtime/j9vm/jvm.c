@@ -4082,7 +4082,7 @@ JVM_LoadLibrary(const char *libName, jboolean throwOnFailure)
 	}
 #endif /* defined(WIN32) */
 
-#if JAVA_SPEC_VERSION >= 17
+#if JAVA_SPEC_VERSION >= 11
 	if ((NULL == result) && throwOnFailure) {
 		JNIEnv *env = NULL;
 		JavaVM *vm = (JavaVM *)javaVM;
@@ -4114,7 +4114,7 @@ JVM_LoadLibrary(const char *libName, jboolean throwOnFailure)
 			}
 		}
 	}
-#endif /* JAVA_SPEC_VERSION >= 17 */
+#endif /* JAVA_SPEC_VERSION >= 11 */
 
 	Trc_SC_LoadLibrary_Exit(result);
 
