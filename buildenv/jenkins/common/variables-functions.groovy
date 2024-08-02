@@ -308,7 +308,8 @@ def set_repos_variables(BUILD_SPECS=null) {
 
         // default URL and branch for the OpenJ9 and OMR repositories (no entries in defaults.yml)
         EXTENSIONS = ['OpenJ9': ['repo': 'https://github.com/eclipse-openj9/openj9.git',     'branch': 'master'],
-                      'OMR'   : ['repo': 'https://github.com/eclipse-openj9/openj9-omr.git', 'branch': 'openj9']]
+                      'OMR'   : ['repo': 'https://github.com/eclipse-openj9/openj9-omr.git', 'branch': 'openj9'],
+                      'CLOSEDJ9' : ['repo': '', 'branch': '']]
 
         // set OpenJ9 and OMR repos, branches and SHAs
         set_extensions_variables(EXTENSIONS)
