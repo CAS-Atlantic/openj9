@@ -465,8 +465,41 @@ def set_extensions_variables(defaults=null) {
         OMR_SHA = ''
     }
 
+    CLOSEDJ9_REPO = params.CLOSEDJ9_REPO
+    if (!CLOSEDJ9_REPO) {
+        // set it to the value set into the variable file
+        CLOSEDJ9_REPO = VARIABLES.closedj9_repo
+    }
+
+    if (!CLOSEDJ9_REPO) {
+        CLOSEDJ9_REPO = ''
+        if (defaults) {
+            CLOSEDJ9_REPO = defaults.get('CLOSEDJ9').get('repo')
+        }
+    }
+    CLOSEDJ9_REPO = convert_url(CLOSEDJ9_REPO)
+
+    CLOSEDJ9_BRANCH = params.CLOSEDJ9_BRANCH
+    if (!CLOSEDJ9_BRANCH) {
+        // set it to the value set into the variable file
+        CLOSEDJ9_BRANCH = VARIABLES.closedj9_branch
+    }
+
+    if (!CLOSEDJ9_BRANCH) {
+        CLOSEDJ9_BRANCH = ''
+        if (defaults) {
+            CLOSEDJ9_BRANCH = defaults.get('CLOSEDJ9').get('branch')
+        }
+    }
+
+    CLOSEDJ9_SHA = params.CLOSEDJ9_SHA
+    if (!CLOSEDJ9_SHA) {
+        CLOSEDJ9_SHA = ''
+    }
+
     echo "Using OPENJ9_REPO = ${OPENJ9_REPO} OPENJ9_BRANCH = ${OPENJ9_BRANCH} OPENJ9_SHA = ${OPENJ9_SHA}"
     echo "Using OMR_REPO = ${OMR_REPO} OMR_BRANCH = ${OMR_BRANCH} OMR_SHA = ${OMR_SHA}"
+    echo "Using CLOSEDJ9_REPO = ${CLOSEDJ9_REPO} CLOSEDJ9_BRANCH = ${CLOSEDJ9_BRANCH} CLOSEDJ9_SHA = ${CLOSEDJ9_SHA}"
 }
 
 /*

@@ -34,8 +34,12 @@ def get_source() {
         OPENJ9_SHA_OPTION = (OPENJ9_SHA != "") ? "-openj9-sha=${OPENJ9_SHA}" : ""
 
         OMR_REPO_OPTION = (OMR_REPO != "") ? "-omr-repo=${OMR_REPO}" : ""
-        OMR_BRANCH_OPTION = (OMR_BRANCH != "")? "-omr-branch=${OMR_BRANCH}" : ""
+        OMR_BRANCH_OPTION = (OMR_BRANCH != "") ? "-omr-branch=${OMR_BRANCH}" : ""
         OMR_SHA_OPTION = (OMR_SHA != "") ? "-omr-sha=${OMR_SHA}" : ""
+
+        CLOSEDJ9_REPO_OPTION = (CLOSEDJ9_REPO != "") ? "-closedj9-repo=${CLOSEDJ9_REPO}" : ""
+        CLOSEDJ9_BRANCH_OPTION = (CLOSEDJ9_BRANCH != "") ? "-closedj9-branch=${CLOSEDJ9_BRANCH}" : ""
+        CLOSEDJ9_SHA_OPTION = (CLOSEDJ9_SHA != "") ? "-closedj9-sha=${CLOSEDJ9_SHA}" : ""
 
         if (OPENJDK_REFERENCE_REPO) {
             OPENJ9_REFERENCE = "-openj9-reference=${OPENJDK_REFERENCE_REPO}"
@@ -59,7 +63,7 @@ def get_sources_with_authentication() {
 }
 
 def get_source_call(gskit_cred="") {
-    sh "bash get_source.sh ${EXTRA_GETSOURCE_OPTIONS} ${gskit_cred} ${OPENJ9_REPO_OPTION} ${OPENJ9_BRANCH_OPTION} ${OPENJ9_SHA_OPTION} ${OPENJ9_REFERENCE} ${OMR_REPO_OPTION} ${OMR_BRANCH_OPTION} ${OMR_SHA_OPTION} ${OMR_REFERENCE}"
+    sh "bash get_source.sh ${EXTRA_GETSOURCE_OPTIONS} ${gskit_cred} ${OPENJ9_REPO_OPTION} ${OPENJ9_BRANCH_OPTION} ${OPENJ9_SHA_OPTION} ${OPENJ9_REFERENCE} ${OMR_REPO_OPTION} ${OMR_BRANCH_OPTION} ${OMR_SHA_OPTION} ${OMR_REFERENCE} ${CLOSEDJ9_REPO_OPTION} ${CLOSEDJ9_BRANCH_OPTION} ${CLOSEDJ9_SHA_OPTION}"
 }
 
 def get_source_call_optional_gskit() {
