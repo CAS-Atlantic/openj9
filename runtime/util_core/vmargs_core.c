@@ -293,8 +293,11 @@ addXOptionsFile(J9PortLibrary* portLib, const char *xOptionsfileArg, J9JavaVMArg
 		/* convert to ascii if on OS390 */
 #if defined(J9ZOS390)
 		{
-			char *abuf;
-			abuf = e2a(optionsFileContents, length);
+			char *abuf = e2a(optionsFileContents, length);
+			if (NULL == abuf) {
+				j9mem_free_memory(optionsFileBuffer);
+				return -1;
+			}
 			memcpy(optionsFileContents, abuf, length);
 			free(abuf);
 		}
