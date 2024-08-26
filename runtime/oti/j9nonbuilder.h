@@ -6162,6 +6162,7 @@ typedef struct J9JavaVM {
 	omrthread_monitor_t jfrSamplerMutex;
 	omrthread_t jfrSamplerThread;
 	UDATA jfrSamplerState;
+	IDATA jfrAsyncKey;
 #endif /* defined(J9VM_OPT_JFR) */
 #if JAVA_SPEC_VERSION >= 22
 	omrthread_monitor_t closeScopeMutex;
