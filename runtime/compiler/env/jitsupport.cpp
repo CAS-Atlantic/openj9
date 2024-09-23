@@ -244,9 +244,10 @@ I_32 j9jit_vfprintfId(I_32 fileId, const char *format, ...)
    va_end(args);
    if (fileId != -1)
       {
-       char * bufPtr = buf;
+      char *bufPtr = buf;
 #if defined(J9ZOS390)
-       bufPtr = a2e(bufPtr,length);
+      bufPtr = a2e(bufPtr, length);
+      if (NULL != bufPtr)
 #endif
       if ((U_32)j9file_write(fileId, bufPtr, length) == length)
          {
@@ -306,6 +307,7 @@ I_32 j9jit_vfprintf(TR::FILE *pFile, const char *format, va_list args)
       char *bufPtr = buf;
 #if defined(J9ZOS390)
       bufPtr = a2e(bufPtr, length);
+      if (NULL != bufPtr)
 #endif
       if (pFile->write(privatePortLibrary, bufPtr, length) == length)
          {

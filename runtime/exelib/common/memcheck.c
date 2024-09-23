@@ -2660,8 +2660,7 @@ memoryCheck_filter_nonVM_unFreed_Blcoks(OMRPortLibrary *portLib)
 			for (i = 0; i < ignoredCallsitesSize; i++) {
 				if ((0 == strncmp(blockHeader->node->callSite, ignoredCallsites[i], strlen(ignoredCallsites[i])))
 #ifdef J9ZOS390
-					|| (0 == strncmp(ebcdic_callsite, ignoredCallsites[i], strlen(ignoredCallsites[i])))
-
+					|| ((NULL != ebcdic_callsite) && (0 == strncmp(ebcdic_callsite, ignoredCallsites[i], strlen(ignoredCallsites[i]))))
 #endif
 				) {
 #if 0
@@ -2681,9 +2680,6 @@ memoryCheck_filter_nonVM_unFreed_Blcoks(OMRPortLibrary *portLib)
 					}
 					globalDeallocator(portLib, blockHeader);
 					result++;
-#ifdef J9ZOS390
-					free(ebcdic_callsite);
-#endif
 					break;
 				}
 			}

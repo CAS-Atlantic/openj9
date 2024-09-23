@@ -213,18 +213,18 @@ getConditionExceptionConstructorArgs(struct J9PortLibrary* portLibrary, void *gp
 	nameASCII = NULL;
 	CEE3GRN(nameEBCDIC, &rcFc);
 	if ( _FBCHECK(rcFc, CEE000) == 0 ) {
-		char *firstBlank = NULL;
-
 		/* CEE3GRN left justifies the name and fills everything to the right of it with blanks, so the result of e2a_func
 		 * is a char array that is the same size as nameEBCDIC */
-		nameEBCDIC[sizeof(_CHAR80)-1] = 0; /* force null-termination of ebcdic string*/
-		nameASCII = e2a_func(nameEBCDIC, sizeof(_CHAR80));	/* e2a_func() uses malloc, caller to free */
-		nameASCII[sizeof(_CHAR80)-1] = '\0'; /* force null-termination of ascii string */
-
-		/* remove the trailing blank characters */
-		firstBlank = strchr(nameASCII, ' ');
-		if (NULL != firstBlank) {
-			*firstBlank = '\0';
+		nameEBCDIC[sizeof(_CHAR80) - 1] = 0; /* force null-termination of ebcdic string*/
+		nameASCII = e2a_func(nameEBCDIC, sizeof(_CHAR80)); /* e2a_func() uses malloc, caller to free */
+		if (NULL != nameASCII) {
+			char *firstBlank = NULL;
+			nameASCII[sizeof(_CHAR80) - 1] = '\0'; /* force null-termination of ascii string */
+			/* remove the trailing blank characters */
+			firstBlank = strchr(nameASCII, ' ');
+			if (NULL != firstBlank) {
+				*firstBlank = '\0';
+			}
 		}
 	}
 	ceArgs->failingRoutine = nameASCII;
