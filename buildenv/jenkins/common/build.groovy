@@ -331,6 +331,7 @@ def build() {
         dir(OPENJDK_CLONE_DIR) {
             def jdkImageDir = "build/${RELEASE}/images/${JDK_FOLDER}"
             try {
+                sh "echo ${jdkImageDir} ... java version check"
                 sh "${jdkImageDir}/bin/java -Xjit -version"
             } catch (e) {
                 archive_diagnostics(jdkImageDir)
@@ -372,6 +373,12 @@ def archive_sdk() {
                 }
             }
             if (SPEC.contains('zos')) {
+                def jdk_image_dir = "J${JAVA_RELEASE}_64"
+                sh "echo 'The JDK Folder is ... ${jdk_image_dir}'"
+                sh "echo 'Starting the folder renaming and prt files ... ${jdk_image_dir}'"
+                sh "cd ${buildDir} && mv ${JDK_FOLDER} ${jdk_image_dir}"
+                JDK_FOLDER = "${jdk_image_dir}"
+                sh "echo 'After redirecting ${JDK_FOLDER}'"
                 def libDir = "${buildDir}${JDK_FOLDER}/lib"
                 def srcDir = "${libDir}/src"
                 // Set the extended attributes for binaries and libraries.
