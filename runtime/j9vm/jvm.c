@@ -1554,6 +1554,9 @@ typedef struct J9SpecialArguments {
 	const char *executableJarPath;
 	BOOLEAN captureCommandLine;
 	BOOLEAN fips140_3;
+#if defined(J9VM_OPT_SNAPSHOTS)
+	const char *vmSnapshotFilePath;
+#endif /* defined(J9VM_OPT_SNAPSHOTS) */
 } J9SpecialArguments;
 /**
  * Look for special options:
@@ -1609,6 +1612,10 @@ initialArgumentScan(JavaVMInitArgs *args, J9SpecialArguments *specialArgs)
 		} else if (0 == strcmp(args->options[argCursor].optionString, VMOPT_XENABLEFIPS140_3)) {
 			specialArgs->fips140_3 = TRUE;
 #endif /* defined(FIPS_PREVIEW_OPTIONS_ACCEPTED_PLATFORM) */
+#if defined(J9VM_OPT_SNAPSHOTS)
+		} else if (0 == strncmp(args->options[argCursor].optionString, VMOPT_XSNAPSHOT, strlen(VMOPT_XSNAPSHOT))) {
+			specialArgs->vmSnapshotFilePath = args->options[argCursor].optionString + strlen(VMOPT_XSNAPSHOT);
+#endif /* defined(J9VM_OPT_SNAPSHOTS) */
 		}
 	}
 
@@ -1983,6 +1990,9 @@ JNI_CreateJavaVM_impl(JavaVM **pvm, void **penv, void *vm_args, BOOLEAN isJITSer
 	specialArgs.ibmMallocTraceSet = &ibmMallocTraceSet;
 	specialArgs.captureCommandLine = TRUE;
 	specialArgs.fips140_3 = FALSE;
+#if defined(J9VM_OPT_SNAPSHOTS)
+	specialArgs.vmSnapshotFilePath = NULL;
+#endif /* defined(J9VM_OPT_SNAPSHOTS) */
 #if defined(J9ZOS390)
 	/*
 	 * Temporarily disable capturing the command line on z/OS.
@@ -2239,6 +2249,13 @@ JNI_CreateJavaVM_impl(JavaVM **pvm, void **penv, void *vm_args, BOOLEAN isJITSer
 	args = (JavaVMInitArgs *)vm_args;
 	launcherArgumentsSize = initialArgumentScan(args, &specialArgs);
 	localVerboseLevel = specialArgs.localVerboseLevel;
+
+#if defined(J9VM_OPT_SNAPSHOTS)
+	if (NULL != specialArgs.vmSnapshotFilePath) {
+		createParams.flags |= J9_CREATEJAVAVM_SNAPSHOT;
+		createParams.vmSnapshotFilePath = specialArgs.vmSnapshotFilePath;
+	}
+#endif /* defined(J9VM_OPT_SNAPSHOTS) */
 
 	if (VERBOSE_INIT == localVerboseLevel) {
 		createParams.flags |= J9_CREATEJAVAVM_VERBOSE_INIT;

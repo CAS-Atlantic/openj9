@@ -193,6 +193,7 @@ set(main_sources
 	vmphases.c
 	vmprops.c
 	vmruntimestate.c
+	VMSnapshotImpl.cpp
 	vmthinit.c
 	vmthread.cpp
 	xcheck.c
