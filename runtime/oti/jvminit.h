@@ -683,6 +683,7 @@ enum INIT_STAGE {
 #define VMOPT_PATCH_MODULE "--patch-module"
 #define VMOPT_ILLEGAL_ACCESS "--illegal-access="
 #define VMOPT_ENABLE_NATIVE_ACCESS "--enable-native-access"
+#define VMOPT_ILLEGAL_NATIVE_ACCESS "--illegal-native-access="
 
 #define VMOPT_XDISABLEFIPS140_3 "-Xdisablefips140-3"
 #define VMOPT_XENABLEFIPS140_3 "-Xenablefips140-3"
@@ -725,6 +726,7 @@ enum INIT_STAGE {
 #if JAVA_SPEC_VERSION >= 23
 #define SYSPROP_SUN_MISC_UNSAFE_MEMORY_ACCESS "sun.misc.unsafe.memory.access"
 #endif /* JAVA_SPEC_VERSION >= 23 */
+#define SYSPROP_JDK_MODULE_ILLEGALNATIVEACCESS "jdk.module.illegal.native.access"
 #define JAVA_BASE_MODULE "java.base"
 
 #define SYSPROP_COM_SUN_MANAGEMENT "-Dcom.sun.management."
