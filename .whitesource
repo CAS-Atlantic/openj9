@@ -1,5 +1,8 @@
 {
   "settingsInheritedFrom": "whitesource-config/whitesource-config@master",
+  "scanSettings": {
+    "configMode": "LOCAL"
+  },
   "scanSettingsSAST": {
     "enableScan": true,
     "scanPullRequests": true,
