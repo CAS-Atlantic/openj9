@@ -6510,7 +6510,7 @@ TR::Register *J9::Power::TreeEvaluator::VMnewEvaluator(TR::Node *node, TR::CodeG
                TR_ASSERT_FATAL_WITH_NODE(node,
                   (fej9->getOffsetOfDiscontiguousDataAddrField() - fej9->getOffsetOfContiguousDataAddrField()) == 8,
                   "Offset of dataAddr field in discontiguous array is expected to be 8 bytes more than contiguous array. "
-                  "But was %d bytes for discontigous and %d bytes for contiguous array.\n",
+                  "But was %d bytes for discontiguous and %d bytes for contiguous array.\n",
                   fej9->getOffsetOfDiscontiguousDataAddrField(), fej9->getOffsetOfContiguousDataAddrField());
 
                iCursor = generateTrg1Src1Instruction(cg, TR::InstOpCode::cntlzd, node, offsetReg, enumReg, iCursor);
@@ -11939,8 +11939,27 @@ J9::Power::CodeGenerator::inlineDirectCall(TR::Node *node, TR::Register *&result
       {
       bool disableCASInlining = !cg->getSupportsInlineUnsafeCompareAndSet();
       bool disableCAEInlining = !cg->getSupportsInlineUnsafeCompareAndExchange();
+      static bool disableOSW = feGetEnv("TR_noPauseOnSpinWait") != NULL;
       switch (methodSymbol->getRecognizedMethod())
          {
+      case TR::java_lang_Thread_onSpinWait:
+         {
+         if (!disableOSW)
+            {
+            if (comp->getOption(TR_TraceCG))
+               {
+               traceMsg(comp, "Inlining Thread.onSpinWait call node %p as yield instruction.\n", node);
+               }
+
+            /*
+             * onSpinWait() method calls VM_AtomicSupport::yieldCPU() which is a yield instruction encoded as "or r27, r27, r27".
+             * Check omr/include_core/AtomicSupport.hpp for the JNI implementation.
+             */
+            generateInstruction(cg, TR::InstOpCode::yield, node);
+            return true;
+            }
+         break;
+         }
       case TR::java_util_concurrent_ConcurrentLinkedQueue_tmOffer:
          {
          if (cg->getSupportsInlineConcurrentLinkedQueue())
