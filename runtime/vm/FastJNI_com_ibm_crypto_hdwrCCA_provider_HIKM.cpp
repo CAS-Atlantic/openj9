@@ -190,7 +190,6 @@ loadCryptoLib(J9VMThread *currentThread)
         PORT_ACCESS_FROM_VMC(currentThread);
         cryptoPointers_t *cryptFuncs = (cryptoPointers_t*)j9mem_allocate_memory(sizeof(cryptoPointers_t), J9MEM_CATEGORY_VM_JCL);
         UDATA* cryptoLibrary = &(currentThread->javaVM->jniHikmCryptoLibrary);
-        J9PortLibrary * portLib = currentThread->javaVM->portLibrary;
         char* dir = currentThread->javaVM->j2seRootDirectory;
         char correctPath[PATH_MAX] = "";
         char *correctPathPtr = correctPath;

@@ -82,7 +82,6 @@ loadCryptoLib(J9VMThread *currentThread)
 		CIPHER_t* CIPHER_encryptFinal = NULL;
 		CIPHER_t* CIPHER_decryptFinal = NULL;
 		z_kmc_native_t* z_kmc_native = NULL;
-		J9PortLibrary * portLib = currentThread->javaVM->portLibrary;
 		J9JavaVM* vm = currentThread->javaVM;
 		BOOLEAN fips140_2 = vm->fipsHome == vm->javaHome;
 		char* dir = fips140_2 ? vm->j2seRootDirectory : (char *)vm->fipsHome;
