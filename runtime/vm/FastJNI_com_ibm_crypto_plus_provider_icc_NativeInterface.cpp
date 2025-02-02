@@ -107,7 +107,7 @@ loadCryptoLib(J9VMThread *currentThread)
 						}
 					}
 					if (NULL != correctPathPtr) {
-						j9str_printf(portLib, correctPathPtr, expectedPathLength, "%s%s..%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
+						j9str_printf(correctPathPtr, expectedPathLength, "%s%s..%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
 					}
 				} else {
 					/* expectedPathLength - %s/lib/icc/%s - +7 includes "lib", "icc" and NUL terminator */
@@ -119,7 +119,7 @@ loadCryptoLib(J9VMThread *currentThread)
 						}
 					}
 					if (NULL != correctPathPtr) {
-						j9str_printf(portLib, correctPathPtr, expectedPathLength, "%s%slib%sicc%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
+						j9str_printf(correctPathPtr, expectedPathLength, "%s%slib%sicc%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
 					}
 				}
 				if (NULL != correctPathPtr) {

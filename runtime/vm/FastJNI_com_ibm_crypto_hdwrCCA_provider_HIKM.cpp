@@ -212,7 +212,7 @@ loadCryptoLib(J9VMThread *currentThread)
                     }
                 }
                 if (NULL != correctPathPtr) {
-                    j9str_printf(portLib, correctPathPtr, expectedPathLength, "%s%s..%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
+                    j9str_printf(correctPathPtr, expectedPathLength, "%s%s..%s%s", dir, DIR_SEPARATOR_STR, DIR_SEPARATOR_STR, J9_CRYPTO_DLL_NAME);
 #if defined(CRYPTO_DEBUG)
                     fprintf(stderr,"** Attempting to load crypto lib from %s\n", correctPathPtr);
 #endif /* CRYPTO_DEBUG */
