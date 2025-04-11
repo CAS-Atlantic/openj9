@@ -538,6 +538,7 @@ final class Access implements JavaLangAccess {
 	}
 
 /*[IF (21 <= JAVA_SPEC_VERSION) & (JAVA_SPEC_VERSION < 24)]*/
+	@Override
 	public boolean allowSecurityManager() {
 		return System.allowSecurityManager();
 	}
