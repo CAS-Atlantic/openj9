@@ -309,7 +309,7 @@ def set_repos_variables(BUILD_SPECS=null) {
         // default URL and branch for the OpenJ9 and OMR repositories (no entries in defaults.yml)
         EXTENSIONS = ['OpenJ9': ['repo': 'https://github.com/eclipse-openj9/openj9.git',     'branch': 'master'],
                       'OMR'   : ['repo': 'https://github.com/eclipse-openj9/openj9-omr.git', 'branch': 'openj9'],
-                      'CLOSEDJ9' : ['repo': '', 'branch': '']]
+                      'VENDOR_CODE' : ['repo': '', 'branch': '']]
 
         // set OpenJ9 and OMR repos, branches and SHAs
         set_extensions_variables(EXTENSIONS)
@@ -466,41 +466,41 @@ def set_extensions_variables(defaults=null) {
         OMR_SHA = ''
     }
 
-    CLOSEDJ9_REPO = params.CLOSEDJ9_REPO
-    if (!CLOSEDJ9_REPO) {
+    VENDOR_CODE_REPO = params.VENDOR_CODE_REPO
+    if (!VENDOR_CODE_REPO) {
         // set it to the value set into the variable file
-        CLOSEDJ9_REPO = VARIABLES.closedj9_repo
+        VENDOR_CODE_REPO = VARIABLES.vendor_code_repo
     }
 
-    if (!CLOSEDJ9_REPO) {
-        CLOSEDJ9_REPO = ''
+    if (!VENDOR_CODE_REPO) {
+        VENDOR_CODE_REPO = ''
         if (defaults) {
-            CLOSEDJ9_REPO = defaults.get('CLOSEDJ9').get('repo')
+            VENDOR_CODE_REPO = defaults.get('VENDOR_CODE').get('repo')
         }
     }
-    CLOSEDJ9_REPO = convert_url(CLOSEDJ9_REPO)
+    VENDOR_CODE_REPO = convert_url(VENDOR_CODE_REPO)
 
-    CLOSEDJ9_BRANCH = params.CLOSEDJ9_BRANCH
-    if (!CLOSEDJ9_BRANCH) {
+    VENDOR_CODE_BRANCH = params.VENDOR_CODE_BRANCH
+    if (!VENDOR_CODE_BRANCH) {
         // set it to the value set into the variable file
-        CLOSEDJ9_BRANCH = VARIABLES.closedj9_branch
+        VENDOR_CODE_BRANCH = VARIABLES.vendor_code_branch
     }
 
-    if (!CLOSEDJ9_BRANCH) {
-        CLOSEDJ9_BRANCH = ''
+    if (!VENDOR_CODE_BRANCH) {
+        VENDOR_CODE_BRANCH = ''
         if (defaults) {
-            CLOSEDJ9_BRANCH = defaults.get('CLOSEDJ9').get('branch')
+            VENDOR_CODE_BRANCH = defaults.get('VENDOR_CODE').get('branch')
         }
     }
 
-    CLOSEDJ9_SHA = params.CLOSEDJ9_SHA
-    if (!CLOSEDJ9_SHA) {
-        CLOSEDJ9_SHA = ''
+    VENDOR_CODE_SHA = params.VENDOR_CODE_SHA
+    if (!VENDOR_CODE_SHA) {
+        VENDOR_CODE_SHA = ''
     }
 
     echo "Using OPENJ9_REPO = ${OPENJ9_REPO} OPENJ9_BRANCH = ${OPENJ9_BRANCH} OPENJ9_SHA = ${OPENJ9_SHA}"
     echo "Using OMR_REPO = ${OMR_REPO} OMR_BRANCH = ${OMR_BRANCH} OMR_SHA = ${OMR_SHA}"
-    echo "Using CLOSEDJ9_REPO = ${CLOSEDJ9_REPO} CLOSEDJ9_BRANCH = ${CLOSEDJ9_BRANCH} CLOSEDJ9_SHA = ${CLOSEDJ9_SHA}"
+    echo "Using VENDOR_CODE_REPO = ${VENDOR_CODE_REPO} VENDOR_CODE_BRANCH = ${VENDOR_CODE_BRANCH} VENDOR_CODE_SHA = ${VENDOR_CODE_SHA}"
 }
 
 /*
@@ -1052,7 +1052,7 @@ def setup() {
             // pipelineFunctions already loads pipeline-functions, so in this case let's just dup the variable buildFile
             // TODO revisit all the loads and try to optimize.
             buildFile = pipelineFunctions
-            SHAS = buildFile.get_shas(OPENJDK_REPO, OPENJDK_BRANCH, OPENJ9_REPO, OPENJ9_BRANCH, OMR_REPO, OMR_BRANCH, VENDOR_TEST_REPOS_MAP, VENDOR_TEST_BRANCHES_MAP, VENDOR_TEST_SHAS_MAP)
+            SHAS = buildFile.get_shas(OPENJDK_REPO, OPENJDK_BRANCH, OPENJ9_REPO, OPENJ9_BRANCH, OMR_REPO, OMR_BRANCH, VENDOR_CODE_REPO, VENDOR_CODE_BRANCH, VENDOR_TEST_REPOS_MAP, VENDOR_TEST_BRANCHES_MAP, VENDOR_TEST_SHAS_MAP)
             BUILD_NAME = buildFile.get_build_job_name(SPEC, SDK_VERSION, BUILD_IDENTIFIER)
             // Stash DSL file so we can quickly load it on the Jenkins Manager node
             if (params.AUTOMATIC_GENERATION != 'false') {
