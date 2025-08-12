@@ -293,7 +293,6 @@ omr_add_exports(jclse
 	Java_com_ibm_oti_vm_ORBVMHelpers_is32Bit
 	Java_com_ibm_oti_vm_VM_allInstances
 	Java_com_ibm_oti_vm_VM_dumpString
-	Java_com_ibm_oti_vm_VM_getjfrCMDLineOption
 	Java_com_ibm_oti_vm_VM_getClassNameImpl
 	Java_com_ibm_oti_vm_VM_getClassPathCount
 	Java_com_ibm_oti_vm_VM_getNonBootstrapClassLoader
@@ -695,6 +694,7 @@ endif()
 
 if(J9VM_OPT_JFR)
 	omr_add_exports(jclse
+		Java_com_ibm_oti_vm_VM_getjfrCMDLineOption
 		Java_com_ibm_oti_vm_VM_isJFREnabled
 		Java_com_ibm_oti_vm_VM_isJFRRecordingStarted
 		Java_com_ibm_oti_vm_VM_jfrDump
@@ -869,5 +869,12 @@ endif()
 if(NOT JAVA_SPEC_VERSION LESS 25)
 	omr_add_exports(jclse
 		Java_jdk_internal_vm_vector_VectorSupport_getCPUFeatures
+	)
+endif()
+
+# java 26+
+if(NOT JAVA_SPEC_VERSION LESS 26)
+	omr_add_exports(jclse
+		Java_java_lang_Class_getClassFileAccessFlags
 	)
 endif()
