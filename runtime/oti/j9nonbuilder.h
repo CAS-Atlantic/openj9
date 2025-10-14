@@ -4959,7 +4959,8 @@ typedef struct J9MemoryManagerFunctions {
 	void  ( *j9gc_set_allocation_sampling_interval)(struct J9JavaVM *vm, UDATA samplingInterval);
 	void  ( *j9gc_set_allocation_threshold)(struct J9VMThread *vmThread, UDATA low, UDATA high) ;
 	void  ( *j9gc_objaccess_recentlyAllocatedObject)(struct J9VMThread *vmThread, J9Object *dstObject) ;
-	void  ( *j9gc_objaccess_postStoreClassToClassLoader)(struct J9VMThread* vmThread, J9ClassLoader* destClassLoader, J9Class* srcClass) ;
+	void  ( *j9gc_objaccess_postStoreClassToClassLoader)(struct J9VMThread *vmThread, J9ClassLoader *destClassLoader, J9Class *srcClass) ;
+	void  ( *j9gc_objaccess_postStoreModuleToClassLoader)(struct J9VMThread *vmThread, J9ClassLoader *destClassLoader, J9Module *srcModule) ;
 	I_32  ( *j9gc_objaccess_getObjectHashCode)(struct J9JavaVM *vm, J9Object* object) ;
 	j9object_t  ( *j9gc_createJavaLangString)(struct J9VMThread *vmThread, U_8 *data, UDATA length, UDATA stringFlags) ;
 	j9object_t  ( *j9gc_createJavaLangStringWithUTFCache)(struct J9VMThread *vmThread, struct J9UTF8 *utf) ;
@@ -5467,6 +5468,8 @@ typedef struct J9InternalVMFunctions {
 #endif /* JAVA_SPEC_VERSION >= 24 */
 	jobjectArray (*getSystemPropertyList)(JNIEnv *env);
 	void (*freeMapCaches)(struct J9ClassLoader *classLoader);
+	jvmtiError (*getTargetVMThreadHelper)(struct J9VMThread *currentThread, jthread thread, jvmtiError vThreadError, UDATA flags, struct J9VMThread **vmThreadPtr, BOOLEAN* isVirtualThread, BOOLEAN *isThreadAlive);
+	void (*releaseTargetVMThreadHelper)(struct J9VMThread *currentThread, struct J9VMThread *targetThread, jthread thread);
 } J9InternalVMFunctions;
 
 /* Jazz 99339: define a new structure to replace JavaVM so as to pass J9NativeLibrary to JVMTIEnv  */

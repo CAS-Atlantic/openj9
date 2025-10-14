@@ -38,6 +38,10 @@
 #if JAVA_SPEC_VERSION >= 24
 #include "j9protos.h"
 #endif /* JAVA_SPEC_VERSION >= 24 */
+#if JAVA_SPEC_VERSION >= 25
+#include "jvmtiInternal.h"
+#include "objhelp.h"
+#endif /* JAVA_SPEC_VERSION >= 25 */
 
 extern "C" {
 
@@ -684,8 +688,83 @@ JVM_TakeVirtualThreadListToUnblock(JNIEnv *env, jclass ignored)
 JNIEXPORT jobject JNICALL
 JVM_CreateThreadSnapshot(JNIEnv *env, jobject thread)
 {
-	Assert_SC_true(!"JVM_CreateThreadSnapshot unimplemented");
-	return NULL;
+	J9VMThread *currentThread = (J9VMThread *)env;
+	J9JavaVM *vm = currentThread->javaVM;
+	J9InternalVMFunctions const * const vmfns = vm->internalVMFunctions;
+
+	vmfns->internalEnterVMFromJNI(currentThread);
+
+	J9Class *clazz = J9VMJDKINTERNALVMTHREADSNAPSHOT_OR_NULL(vm);
+	j9object_t resultObject = NULL;
+	jobject result = NULL;
+
+	if ((NULL == thread) || (NULL == clazz)) {
+		vmfns->setCurrentExceptionUTF(currentThread, J9VMCONSTANTPOOL_JAVALANGINTERNALERROR, NULL);
+	} else {
+		j9object_t threadObject = NULL;
+		BOOLEAN isVirtual = FALSE;
+		BOOLEAN isAlive = FALSE;
+		J9VMThread *targetThread = NULL;
+		if (JVMTI_ERROR_NONE != vmfns->getTargetVMThreadHelper(
+				currentThread, thread, JVMTI_ERROR_NONE, 0,
+				&targetThread, &isVirtual, &isAlive)
+		) {
+			goto done;
+		}
+
+		if (!isAlive) {
+			goto done;
+		}
+
+		if (NULL != targetThread) {
+			vmfns->haltThreadForInspection(currentThread, targetThread);
+		}
+
+		resultObject = vm->memoryManagerFunctions->J9AllocateObject(currentThread, clazz, J9_GC_ALLOCATE_OBJECT_NON_INSTRUMENTABLE);
+		if (NULL == resultObject) {
+			vmfns->setHeapOutOfMemoryError(currentThread);
+			goto done;
+		}
+
+		threadObject = J9_JNI_UNWRAP_REFERENCE(thread);
+		J9VMJDKINTERNALVMTHREADSNAPSHOT_SET_NAME(currentThread, resultObject, J9VMJAVALANGTHREAD_NAME(currentThread, threadObject));
+		if (isVirtual) {
+			j9object_t continuationObject = J9VMJAVALANGVIRTUALTHREAD_CONT(currentThread, threadObject);
+
+			J9VMJDKINTERNALVMTHREADSNAPSHOT_SET_CARRIERTHREAD(
+					currentThread, resultObject, J9VMJAVALANGVIRTUALTHREAD_CARRIERTHREAD(currentThread, threadObject));
+
+			/* The following need to be filled for a virtual thread:
+			 * - blockerObject
+			 * - blockerTypeOrdinal to be filled
+			 * - status
+			 * - stacktrace
+			 * - locks
+			 */
+		} else {
+			/* The following need to be filled for a platform thread:
+			 * - blockerObject
+			 * - blockerTypeOrdinal to be filled
+			 * - status
+			 * - stacktrace
+			 * - locks
+			 */
+		}
+
+		if (NULL != resultObject) {
+			result = vmfns->j9jni_createLocalRef(env, resultObject);
+		}
+
+		if (NULL != targetThread) {
+			vmfns->resumeThreadForInspection(currentThread, targetThread);
+		}
+
+		vmfns->releaseTargetVMThreadHelper(currentThread, targetThread, thread);
+	}
+
+done:
+	vmfns->internalExitVMToJNI(currentThread);
+	return result;
 }
 
 JNIEXPORT jboolean JNICALL
