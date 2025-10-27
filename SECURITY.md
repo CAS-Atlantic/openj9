@@ -6,7 +6,7 @@ Eclipse OpenJ9 follows the [Eclipse Vulnerability Reporting Policy](https://www.
 
 Eclipse OpenJ9 supports security updates only in upcoming OpenJ9 releases.
 
-Since OpenJ9 currently uses a single stream to support the Long Term Support (LTS) releases of Java (8, 11 and 17) as well as the feature releases, fixes to the single OpenJ9 stream will be available in each of the next Java releases.
+Since OpenJ9 currently uses a single stream to support the Long Term Support (LTS) releases of Java (8, 11, 17 and 21) as well as the feature releases, fixes to the single OpenJ9 stream will be available in each of the next Java releases.
 
 ## Reporting a Vulnerability
 
